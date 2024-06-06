@@ -5,5 +5,8 @@ LABEL website="https://github.com/Infomaniak/certbot-dns-infomaniak"
 
 ENV INFOMANIAK_API_TOKEN="" 
 
-RUN python tools/pip_install.py --no-cache-dir certbot-dns-infomaniak
-ENTRYPOINT [ "certbot", "certonly", "--authenticator", "dns-infomaniak" ]
+COPY entrypoint.sh /entrypoint.sh
+RUN python tools/pip_install.py --no-cache-dir certbot-dns-infomaniak \
+  chmod +x /entrypoint.sh
+VOLUME /cert
+ENTRYPOINT [ "/entrypoint.sh" ]
