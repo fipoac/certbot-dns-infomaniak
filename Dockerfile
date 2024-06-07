@@ -4,6 +4,7 @@ LABEL description="This plugin enables usage of Infomaniak public API to complet
 LABEL website="https://github.com/Infomaniak/certbot-dns-infomaniak"
 
 ENV INFOMANIAK_API_TOKEN="" 
+ENV CERT_NAME="certbot"
 
 COPY entrypoint.sh /entrypoint.sh
 RUN python tools/pip_install.py --no-cache-dir certbot-dns-infomaniak && \
