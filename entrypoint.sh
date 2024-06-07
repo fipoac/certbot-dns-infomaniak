@@ -15,4 +15,5 @@ set -e
 # fi
 # echo "Starting cron for autorenewals"
 # exec crond -f
-certbot certonly --authenticator dns-infomaniak --cert-name $CERT_NAME "$@"
+wget https://acme-v02.api.letsencrypt.org/directory
+echo directory
