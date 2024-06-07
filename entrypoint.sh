@@ -5,9 +5,10 @@ if [ -e /etc/letsencrypt/live/$CERT_NAME/fullchain.pem ] && [ -s /etc/letsencryp
   echo "Certificate already installed"
 else
   echo "Requesting certificate"
-	output=$(certbot certonly --authenticator dns-infomaniak --cert-name $CERT_NAME "$@")
+	output=$(certbot certonly --logs-dir /tmp/certbot --authenticator dns-infomaniak --cert-name $CERT_NAME "$@")
   echo "Copying cert und key to /cert"
   CERT_PATH=$(echo "$output" | grep -o '/.*fullchain\.pem')
+  echo $output
   export CERT_NAME=$(basename $(dirname $CERT_PATH))
   cp -f /etc/letsencrypt/live/$CERT_NAME/fullchain.pem /cert
   cp -f /etc/letsencrypt/live/$CERT_NAME/privkey.pem /cert
