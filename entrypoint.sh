@@ -1,12 +1,14 @@
 #!/bin/sh
 set -e
-echo "30 3 * * 6 certbot renew" | crontab -
+echo "30 3 * * 6 certbot renew && cp -f /etc/letsencrypt/live/$CERT_NAME/fullchain.pem /cert && cp -f /etc/letsencrypt/live/$CERT_NAME/privkey.pem /cert" | crontab -
 if [ -e /etc/letsencrypt/live/$CERT_NAME/fullchain.pem ] && [ -s /etc/letsencrypt/live/$CERT_NAME/fullchain.pem ]; then
   echo "Certificate already installed"
 else
   echo "Requesting certificate"
-	certbot certonly --authenticator dns-infomaniak --cert-name $CERT_NAME "$@"
+	output=$(certbot certonly --authenticator dns-infomaniak --cert-name $CERT_NAME "$@")
   echo "Copying cert und key to /cert"
+  CERT_PATH=$(echo "$output" | grep -o '/.*fullchain\.pem')
+  export CERT_NAME=$(dirname $CERT_PATH)
   cp -f /etc/letsencrypt/live/$CERT_NAME/fullchain.pem /cert
   cp -f /etc/letsencrypt/live/$CERT_NAME/privkey.pem /cert
 fi
