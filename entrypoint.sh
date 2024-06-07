@@ -8,7 +8,7 @@ else
 	output=$(certbot certonly --authenticator dns-infomaniak --cert-name $CERT_NAME "$@")
   echo "Copying cert und key to /cert"
   CERT_PATH=$(echo "$output" | grep -o '/.*fullchain\.pem')
-  export CERT_NAME=$(dirname $CERT_PATH)
+  export CERT_NAME=$(basename $(dirname $CERT_PATH))
   cp -f /etc/letsencrypt/live/$CERT_NAME/fullchain.pem /cert
   cp -f /etc/letsencrypt/live/$CERT_NAME/privkey.pem /cert
 fi
